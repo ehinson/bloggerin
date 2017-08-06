@@ -9,28 +9,34 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-articleActions: bindActionCreators(articleActions, dispatch)
+  articleActions: bindActionCreators(articleActions, dispatch)
 });
 
 class Bloggerin extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentWillMount(){
+  componentWillMount() {
     this._fetch()
   }
-  async _fetch(){
+  async _fetch() {
     const articlesLength = await falcorModel.getValue('articles.length').then(length => length)
-    const articles = await falconModel.get(['articles', {
-      from: 0,
-      to: articlesLength - 1
-    },
-  ['id', 'articleTitle', 'articleContent']]).then(articleResponse => articleResponse)
-  this.props.articleActions.articlesList(articles);
+    const articles = await falcorModel.get([
+      'articles',
+      {
+        from: 0,
+        to: articlesLength - 1
+      },
+      ['id', 'articleTitle', 'articleContent']
+    ]).then(articleResponse => {
+      return articleResponse.json.articles
+    })
+    console.log(articles);
+    this.props.articleActions.articlesList(articles);
   }
   render() {
     let articlesJSX = []
-    for (let articleKey in this.props){
+    for (let articleKey in this.props) {
       const articleDetails = this.props[articleKey]
       const currentArticleJSX = (
         <div key={articleKey}>

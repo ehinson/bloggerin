@@ -9,6 +9,11 @@ module.exports = {
     filename: 'app.js',
     publicPath: '/'
   },
+  resolve: {
+        alias: {
+            'rx$': path.resolve(__dirname, './node_modules/rx/dist/rx.js')
+        }
+    },
   devServer: {
     inline: true,
     port: 3000,
