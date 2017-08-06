@@ -1,14 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import falcorModel from '../falcorModel.js';
-import {bindActionCreators} from 'redux';
+import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   ...state
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   articleActions: bindActionCreators(articleActions, dispatch)
 });
 
@@ -17,27 +17,31 @@ class Bloggerin extends React.Component {
     super(props);
   }
   componentWillMount() {
-    this._fetch()
+    this._fetch();
   }
   async _fetch() {
-    const articlesLength = await falcorModel.getValue('articles.length').then(length => length)
-    const articles = await falcorModel.get([
-      'articles',
-      {
-        from: 0,
-        to: articlesLength - 1
-      },
-      ['id', 'articleTitle', 'articleContent']
-    ]).then(articleResponse => {
-      return articleResponse.json.articles
-    })
+    const articlesLength = await falcorModel
+      .getValue('articles.length')
+      .then(length => length);
+    const articles = await falcorModel
+      .get([
+        'articles',
+        {
+          from: 0,
+          to: articlesLength - 1
+        },
+        ['id', 'articleTitle', 'articleContent']
+      ])
+      .then(articleResponse => {
+        return articleResponse.json.articles;
+      });
     console.log(articles);
     this.props.articleActions.articlesList(articles);
   }
   render() {
-    let articlesJSX = []
+    let articlesJSX = [];
     for (let articleKey in this.props) {
-      const articleDetails = this.props[articleKey]
+      const articleDetails = this.props[articleKey];
       const currentArticleJSX = (
         <div key={articleKey}>
           <h2>
@@ -47,8 +51,8 @@ class Bloggerin extends React.Component {
             {articleDetails.articleContent}
           </h3>
         </div>
-      )
-      articlesJSX.push(currentArticleJSX)
+      );
+      articlesJSX.push(currentArticleJSX);
     }
     return (
       <div>

@@ -2,63 +2,57 @@ import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import falcor from 'falcor';
 import falcorExpress from 'falcor-express';
 import falcorRouter from 'falcor-router';
 import routes from './routes.js';
 
-mongoose.connect('mongodb://localhost/bloggerin', {
-  useMongoClient: true,
-})
-
-const articleSchema = {
-  articleTitle:String,
-  articleContent:String
-};
-
-const Article = mongoose.model('Article', articleSchema, 'articles');
-
 const app = express();
 app.server = http.createServer(app);
 
 app.use(cors());
-app.use(bodyParser.json({extended: false}));
+app.use(bodyParser.json({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 let cache = {
   articles: [
     {
       id: 987654,
-articleTitle: 'Lorem ipsum - article one',
-articleContent: 'Here goes the content of the article'
+      articleTitle: 'Lorem ipsum - article one',
+      articleContent: 'Here goes the content of the article'
     },
     {
       id: 123456,
-articleTitle: 'Lorem ipsum - article two from backend',
-articleContent: 'Sky is the limit, the content goes here.'
+      articleTitle: 'Lorem ipsum - article two from backend',
+      articleContent: 'Sky is the limit, the content goes here.'
     }
   ]
-}
+};
 
 const model = new falcor.Model({
-  'cache': cache
-})
+  cache: cache
+});
 
-app.use('/model.json', falcorExpress.dataSourceRoute((req, res) => {
-  return new falcorRouter(routes)
-}))
+app.use(
+  '/model.json',
+  falcorExpress.dataSourceRoute((req, res) => {
+    return new falcorRouter(routes);
+  })
+);
 
 app.use(express.static('dist'));
 
 app.get('/', (req, res) => {
   Article.find((err, docs) => {
-    const myArticles = docs.map(item => {
-      return `<h2>${item.articleTitle}</h2>
-      ${item.articleContent}`
-    }).join('<br/>')
+    const myArticles = docs
+      .map(item => {
+        return `<h2>${item.articleTitle}</h2>
+      ${item.articleContent}`;
+      })
+      .join('<br/>');
     res.send(`<h1>Publishing App Initial Application!</h1>
-      ${myArticles}`)
-  })
+      ${myArticles}`);
+  });
 });
 
 app.server.listen(process.env.PORT || 3000);

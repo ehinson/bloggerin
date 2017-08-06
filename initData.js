@@ -9,3 +9,5 @@
     articleContent: 'Sky is the limit, the content goes here.'
   }
 ]
+
+//mongoimport --db local --collection articles --jsonArray initData.js --host=127.0.0.1
