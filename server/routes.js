@@ -1,5 +1,5 @@
 import configMongoose from './configMongoose';
-import sessionRoutes from './routesSession';
+import sessionRoutes from './routeSession';
 const Article = configMongoose.Article;
 
 const Bloggerin = [
