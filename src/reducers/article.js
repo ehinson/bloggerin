@@ -11,7 +11,7 @@ const articleMock = {
 
 const articleReducer = (state = articleMock, action) => {
   switch (action.type) {
-    case RETURN_ALL_ARTICLES:
+    case 'RETURN_ALL_ARTICLES':
       return Object.assign({}, state)
 
     default:
