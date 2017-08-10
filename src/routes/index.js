@@ -1,11 +1,12 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import { Route } from 'react-router';
 import CoreLayout from '../layouts/CoreLayout';
-import PublishingApp from '../layouts/PublishingApp';
+import Bloggerin from '../layouts/Bloggerin';
 import LoginView from '../views/LoginView';
+
 export default (
-  <Route component={CoreLayout} path="/">
-    <IndexRoute component={Bloggerin} name="home" />
-    <Route component={LoginView} path="login" name="login" />
-  </Route>
+  <div>
+    <Route component={Bloggerin} exact path="/" name="home" />
+    <Route component={LoginView} path="/login" name="login" />
+  </div>
 );

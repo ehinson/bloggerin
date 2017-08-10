@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.server.listen(process.env.PORT || 3000);
+app.server.listen(process.env.PORT || 3001);
 
 console.log(`Started on port ${app.server.address().port}`);
 export default app;

@@ -1,14 +1,13 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
-import articleReducer from './reducers/article';
-import Bloggerin from './layouts/Bloggerin';
+import ReactDOM from 'react-dom';
+import createHistory from 'history/createBrowserHistory';
+import Root from './containers/Root';
+import configureStore from './store/configureStore';
 
-const store = createStore(articleReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-console.log(store);
+export const history = createHistory();
+const target = document.getElementById('root');
 
-render(
-  <Provider store={store}>
-  <Bloggerin/>
-</Provider>, document.getElementById('root'));
+export const store = configureStore(window.__INITIAL_STATE__);
+const node = <Root history={history} store={store} />;
+
+ReactDOM.render(node, target);

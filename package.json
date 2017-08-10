@@ -21,6 +21,7 @@
     "falcor-express": "^0.1.4",
     "falcor-http-datasource": "^0.1.3",
     "falcor-router": "^0.8.1",
+    "history": "^4.6.3",
     "jsonwebtoken": "^7.4.2",
     "mongoose": "^4.11.5",
     "prop-types": "^15.5.10",
@@ -28,6 +29,8 @@
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.2",
+    "react-router-dom": "^4.1.2",
+    "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.7.2",
     "redux-simple-router": "^2.0.4",
     "redux-thunk": "^2.2.0"

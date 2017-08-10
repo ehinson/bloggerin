@@ -1,23 +1,22 @@
 const path = require('path');
 
 module.exports = {
-  entry: [
-    'babel-polyfill', './src/app.js'
-  ],
+  entry: ['babel-polyfill', './src/app.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
     publicPath: '/'
   },
   resolve: {
-        alias: {
-            'rx$': path.resolve(__dirname, './node_modules/rx/dist/rx.js')
-        }
-    },
+    alias: {
+      rx$: path.resolve(__dirname, './node_modules/rx/dist/rx.js')
+    }
+  },
   devServer: {
     inline: true,
     port: 3000,
-    contentBase: './dist'
+    contentBase: './dist',
+    historyApiFallback: true
   },
   module: {
     loaders: [
@@ -31,4 +30,4 @@ module.exports = {
       }
     ]
   }
-}
+};
