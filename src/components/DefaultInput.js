@@ -7,7 +7,7 @@ import {
   TextContainer,
   LabelBefore,
   LabelContent
-} from '../styled-components/FormStyledComponents';
+} from '../styled-components/Form/InputStyledComponents';
 
 class DefaultInput extends Component {
   static propTypes = {};
