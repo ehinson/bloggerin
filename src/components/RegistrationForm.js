@@ -4,7 +4,7 @@ import { Form } from '../styled-components/Form/InputStyledComponents';
 import { BouncingButton } from '../styled-components/Form/ButtonStyledComponents';
 import DefaultInput from './DefaultInput';
 
-export default class LoginForm extends Component {
+export default class RegistrationForm extends Component {
   static propTypes = {};
 
   constructor(props) {
@@ -26,13 +26,31 @@ export default class LoginForm extends Component {
           />
           <DefaultInput
             onChange={event => {}}
+            name="firstName"
+            title="First Name "
+            required
+          />
+          <DefaultInput
+            onChange={event => {}}
+            name="lastName"
+            title="Last Name "
+            required
+          />
+          <DefaultInput
+            onChange={event => {}}
+            name="email"
+            title="Email "
+            required
+          />
+          <DefaultInput
+            onChange={event => {}}
             type="password"
             name="password"
             title="Password (password)"
             required
           />
           <div>
-            <BouncingButton type="submit">Log In </BouncingButton>
+            <BouncingButton type="submit">Register </BouncingButton>
           </div>
         </Form>
       </div>

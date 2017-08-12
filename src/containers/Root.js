@@ -7,6 +7,7 @@ import CoreLayout from '../layouts/CoreLayout';
 import Bloggerin from '../layouts/Bloggerin';
 import LoginView from '../views/LoginView';
 import DashboardView from '../views/DashboardView';
+import RegistrationView from '../views/RegistrationView';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -60,6 +61,11 @@ export default class Root extends React.Component {
                       exact
                       path="/dashboard"
                       name="dashboard"
+                    />
+                    <Route
+                      component={RegistrationView}
+                      path="/register"
+                      name="register"
                     />
                   </div>
                 </CoreLayout>

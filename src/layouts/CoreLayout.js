@@ -24,10 +24,10 @@ export default class CoreLayout extends Component {
         <span>
           Links:{' '}
           <Link
-            to="/dashboard"
-            onClick={() => this.handleChangeUrl(store, '/dashboard')}
+            to="/register"
+            onClick={() => this.handleChangeUrl(store, '/register')}
           >
-            Dashboard
+            Register
           </Link>{' '}
           |
           <Link

@@ -15,7 +15,14 @@ export default [
         .digest('hex');
 
       const userStatementQuery = {
-        $and: [{ username: username }, { password: saltedPassHash }]
+        $and: [
+          {
+            username: username
+          },
+          {
+            password: saltedPassHash
+          }
+        ]
       };
 
       return User.find(userStatementQuery, (err, user) => {
@@ -61,6 +68,46 @@ export default [
         }
         return result;
       });
+    }
+  },
+  {
+    route: ['register'],
+    call: (callPath, args) => {
+      const newUserObj = args[0];
+      newUserObj.password = newUserObj.password + 'bloggerin';
+      newUserObj.password = crypto
+        .createHash('sha256')
+        .update(newUserObj.password)
+        .digest('hex');
+      const newUser = new User(newUserObj);
+      return newUser
+        .save((err, data) => {
+          if (err) return err;
+        })
+        .then(newRes => {
+          /*
+              got new obj data, now let's get count:
+             */
+          const newUserDetail = newRes.toObject();
+
+          if (newUserDetail._id) {
+            return null; // Mocked for now
+          } else {
+            // registration failed
+            return [
+              {
+                path: ['register', 'newUserId'],
+                value: 'INVALID'
+              },
+              {
+                path: ['register', 'error'],
+                value: 'Registration failed - no id has been created'
+              }
+            ];
+          }
+          return;
+        })
+        .catch(reason => console.error(reason));
     }
   }
 ];
