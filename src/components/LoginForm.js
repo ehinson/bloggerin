@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import Formsy from 'formsy-react';
 import { Form } from '../styled-components/Form/InputStyledComponents';
 
 import { BouncingButton } from '../styled-components/Form/ButtonStyledComponents';
@@ -18,7 +17,6 @@ export default class LoginForm extends Component {
   }
 
   render() {
-    console.log('PROPS', this.props);
     return (
       <div>
         <Form onSubmit={this.props.onSubmit}>
@@ -37,7 +35,7 @@ export default class LoginForm extends Component {
             required
           />
           <div>
-            <BouncingButton type="submit" label={'Log in'} />
+            <BouncingButton type="submit">Log In </BouncingButton>
           </div>
         </Form>
       </div>

@@ -6,6 +6,7 @@ import falcor from 'falcor';
 import falcorExpress from 'falcor-express';
 import falcorRouter from 'falcor-router';
 import routes from './routes.js';
+import path from 'path';
 
 const app = express();
 app.server = http.createServer(app);
@@ -54,6 +55,9 @@ app.get('/', (req, res) => {
       ${myArticles}`);
   });
 });
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'index.html'));
+// });
 
 app.server.listen(process.env.PORT || 3001);
 

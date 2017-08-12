@@ -6,6 +6,9 @@ import routes from '../routes';
 import CoreLayout from '../layouts/CoreLayout';
 import Bloggerin from '../layouts/Bloggerin';
 import LoginView from '../views/LoginView';
+import DashboardView from '../views/DashboardView';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { injectGlobal } from 'styled-components';
 
@@ -34,36 +37,37 @@ export default class Root extends React.Component {
   static propTypes = {
     store: React.PropTypes.object.isRequired
   };
-  handleChangeUrl = (store, url) => {
-    store.dispatch(push(url));
-  };
+
   render() {
     const store = this.props.store;
     return (
-      <Provider store={store}>
-        <ConnectedRouter history={this.props.history}>
-          <div>
-            <Router>
-              <div>
-                <span>
-                  Links:{' '}
-                  <Link
-                    to="/login"
-                    onClick={() => this.handleChangeUrl(store, '/login')}
-                  >
-                    Login
-                  </Link>{' '}
-                  |
-                  <Link to="/" onClick={() => this.handleChangeUrl(store, '/')}>
-                    Home Page
-                  </Link>
-                </span>
-                {routes}
-              </div>
-            </Router>
-          </div>
-        </ConnectedRouter>
-      </Provider>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <Provider store={store}>
+          <ConnectedRouter history={this.props.history}>
+            <div>
+              <Router>
+                <CoreLayout store={store}>
+                  <div>
+                    <Route component={Bloggerin} exact path="/" name="home" />
+                    <Route
+                      component={LoginView}
+                      exact
+                      path="/login"
+                      name="login"
+                    />
+                    <Route
+                      component={DashboardView}
+                      exact
+                      path="/dashboard"
+                      name="dashboard"
+                    />
+                  </div>
+                </CoreLayout>
+              </Router>
+            </div>
+          </ConnectedRouter>
+        </Provider>
+      </MuiThemeProvider>
     );
   }
 }

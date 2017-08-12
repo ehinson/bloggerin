@@ -4,6 +4,10 @@ import falcorModel from '../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import LoginForm from '../components/LoginForm.js';
+import { Snackbar } from 'material-ui';
+import { push } from 'react-router-redux';
+import history from 'history';
+import { store } from '../app';
 
 const mapStateToProps = state => ({
   ...state
@@ -20,23 +24,47 @@ class LoginView extends React.Component {
       error: null
     };
   }
+
   async login(credentials) {
-    console.info('credentials', credentials);
     await falcorModel.call(['login'], [credentials]).then(result => {
       console.log(result);
       return result;
     });
     const tokenRes = await falcorModel.getValue('login.token');
-    console.info('tokenRes', tokenRes);
+    if (tokenRes === 'INVALID') {
+      const errorRes = await falcorModel.getValue('login.error');
+      this.setState({
+        error: errorRes
+      });
+      return;
+    }
+    if (tokenRes) {
+      const username = await falcorModel.getValue('login.username');
+      const role = await falcorModel.getValue('login.role');
+
+      localStorage.setItem('token', tokenRes);
+      localStorage.setItem('username', username);
+      localStorage.setItem('role', role);
+
+      this.props.history.push('/dashboard');
+
+      store.dispatch(push('/dashboard'));
+    }
     return;
   }
   render() {
     return (
       <div>
         <h1>Login view</h1>
-        <div style={{ maxWidth: 450, margin: '0 auto' }}>
+        <div>
           <LoginForm onSubmit={this.login} />
         </div>
+        <Snackbar
+          autoHideDuration={4000}
+          open={!!this.state.error}
+          message={this.state.error || ''}
+          onRequestClose={() => null}
+        />
       </div>
     );
   }
