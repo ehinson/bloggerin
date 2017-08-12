@@ -69,15 +69,15 @@ export const LabelContent = styled.span`
   width: 100%;
   display: inline-block;
   width: auto;
-  transform: translate3d(-1.75em, 0, 0);
+  transform: ${props =>
+    props.filled ? 'translate3d(200px, 0, 0)' : 'translate3d(-1.75em, 0, 0)'};
   transition: transform 0.3s, opacity 0.3s;
 `;
 
 export const LabelBefore = styled.span`
   display: inline-block;
   margin-top: 0.9em;
-  -webkit-transform: translate3d(-6em, 0, 0);
-  transform: translate3d(-6em, 0, 0);
-  -webkit-transition: -webkit-transform 0.3s;
+  transform: ${props =>
+    props.filled ? 'translate3d(0, 0, 0)' : 'translate3d(-6em, 0, 0)'};
   transition: transform 0.3s;
 `;

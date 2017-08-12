@@ -18,23 +18,26 @@ class DefaultInput extends Component {
     this.state = { currentText: null, inputFilled: false };
   }
   changeValue = e => {
-    if (e.target.value === '') {
-      this.setState({ currentText: null, inputFilled: false });
-    }
-    this.setState({ currentText: e.target.value, inputFilled: true });
+    this.setState({ currentText: e.target.value });
     this.props.setValue(e.target.value);
 
     this.props.onChange(e);
+  };
+  handleInputFocus = e => {
+    this.setState({ inputFilled: true });
+  };
+  handleInputBlur = e => {
+    this.setState({ inputFilled: false });
   };
   render() {
     return (
       <div>
         <TextContainer>
           <TextLabel for="username">
-            <LabelBefore>
+            <LabelBefore filled={this.state.inputFilled}>
               <i className="fa fa-user-circle" aria-hidden="true" />
             </LabelBefore>
-            <LabelContent>
+            <LabelContent filled={this.state.inputFilled}>
               {this.props.name}{' '}
             </LabelContent>
           </TextLabel>
@@ -45,6 +48,8 @@ class DefaultInput extends Component {
             }}
             name={this.props.name}
             onChange={this.changeValue}
+            onFocus={this.handleInputFocus}
+            onBlur={this.handleInputBlur}
             required={this.props.required}
             type={this.props.type}
             value={
