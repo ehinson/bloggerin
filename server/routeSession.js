@@ -19,6 +19,7 @@ export default [
       };
 
       return User.find(userStatementQuery, (err, user) => {
+        console.log(user);
         if (err) {
           console.error(err);
         }

@@ -6,6 +6,29 @@ import routes from '../routes';
 import CoreLayout from '../layouts/CoreLayout';
 import Bloggerin from '../layouts/Bloggerin';
 import LoginView from '../views/LoginView';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import { injectGlobal } from 'styled-components';
+
+injectGlobal`
+*, *::after, *::before {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-size: 16px;
+  background: white;
+  color: #333333;
+  margin: 0;
+  padding: 0;
+  font-family: 'Zilla Slab', serif ;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+`;
+
+injectTapEventPlugin();
 
 export default class Root extends React.Component {
   static propTypes = {

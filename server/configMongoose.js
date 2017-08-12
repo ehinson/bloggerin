@@ -29,7 +29,7 @@ const userSchema = {
 };
 
 const Article = mongoose.model('Article', articleSchema);
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema, 'blogUsers');
 
 export default {
   Article,
