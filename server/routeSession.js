@@ -74,6 +74,7 @@ export default [
     route: ['register'],
     call: (callPath, args) => {
       const newUserObj = args[0];
+      console.log(args);
       newUserObj.password = newUserObj.password + 'bloggerin';
       newUserObj.password = crypto
         .createHash('sha256')
@@ -91,7 +92,17 @@ export default [
           const newUserDetail = newRes.toObject();
 
           if (newUserDetail._id) {
-            return null; // Mocked for now
+            const newUserId = newUserDetail._id.toString();
+            return [
+              {
+                path: ['register', 'newUserId'],
+                value: newUserId
+              },
+              {
+                path: ['register', 'error'],
+                value: false
+              }
+            ];
           } else {
             // registration failed
             return [

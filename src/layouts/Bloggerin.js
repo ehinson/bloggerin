@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import falcorModel from '../falcorModel.js';
 import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
+import {
+  GridItem,
+  GridContainer,
+  Snippet
+} from '../styled-components/Article/ArticleStyledComponents';
 
 const mapStateToProps = state => ({
   ...state
@@ -17,7 +22,9 @@ class Bloggerin extends React.Component {
     super(props);
   }
   componentWillMount() {
-    this._fetch();
+    if (typeof window !== 'undefined') {
+      this._fetch(); // we are server side rendering, no fetching
+    }
   }
   async _fetch() {
     const articlesLength = await falcorModel
@@ -43,21 +50,30 @@ class Bloggerin extends React.Component {
     for (let articleKey in this.props.article) {
       const articleDetails = this.props.article[articleKey];
       const currentArticleJSX = (
-        <div key={articleKey}>
-          <h2>
-            {articleDetails.articleTitle}
-          </h2>
-          <h3>
+        <GridItem key={articleKey}>
+          <Snippet>
             {articleDetails.articleContent}
-          </h3>
-        </div>
+          </Snippet>
+          <h2 className="title title--preview">
+            <a href="/article">
+              {' '}{articleDetails.articleTitle}
+            </a>
+          </h2>
+          <div className="meta meta--preview">
+            <span className="meta__date">
+              <i className="fa fa-calendar-o" /> Date
+            </span>
+          </div>
+        </GridItem>
       );
       articlesJSX.push(currentArticleJSX);
     }
     return (
       <div>
         <h1>Our publishing app</h1>
-        {articlesJSX}
+        <GridContainer>
+          {articlesJSX}
+        </GridContainer>
       </div>
     );
   }

@@ -1,17 +1,16 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { ConnectedRouter, push } from 'react-router-redux';
 import routes from '../routes';
 import CoreLayout from '../layouts/CoreLayout';
 import Bloggerin from '../layouts/Bloggerin';
 import LoginView from '../views/LoginView';
 import DashboardView from '../views/DashboardView';
 import RegistrationView from '../views/RegistrationView';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { injectGlobal } from 'styled-components';
+import { Provider } from 'react-redux';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 injectGlobal`
 *, *::after, *::before {
@@ -35,44 +34,26 @@ body {
 injectTapEventPlugin();
 
 export default class Root extends React.Component {
-  static propTypes = {
-    store: React.PropTypes.object.isRequired
-  };
-
   render() {
-    const store = this.props.store;
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <Provider store={store}>
-          <ConnectedRouter history={this.props.history}>
-            <div>
-              <Router>
-                <CoreLayout store={store}>
-                  <div>
-                    <Route component={Bloggerin} exact path="/" name="home" />
-                    <Route
-                      component={LoginView}
-                      exact
-                      path="/login"
-                      name="login"
-                    />
-                    <Route
-                      component={DashboardView}
-                      exact
-                      path="/dashboard"
-                      name="dashboard"
-                    />
-                    <Route
-                      component={RegistrationView}
-                      path="/register"
-                      name="register"
-                    />
-                  </div>
-                </CoreLayout>
-              </Router>
-            </div>
-          </ConnectedRouter>
-        </Provider>
+        <CoreLayout>
+          <div>
+            <Route component={Bloggerin} exact path="/" name="home" />
+            <Route component={LoginView} exact path="/login" name="login" />
+            <Route
+              component={DashboardView}
+              exact
+              path="/dashboard"
+              name="dashboard"
+            />
+            <Route
+              component={RegistrationView}
+              path="/register"
+              name="register"
+            />
+          </div>
+        </CoreLayout>
       </MuiThemeProvider>
     );
   }

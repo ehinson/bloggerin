@@ -26,6 +26,18 @@ class RegistrationView extends React.Component {
   }
   async register(newUserModel) {
     console.info('newUserModel', newUserModel);
+    await falcorModel.call(['register'], [newUserModel]).then(result => {
+      return result;
+    });
+    const newUserId = await falcorModel.getValue(['register', 'newUserId']);
+    if (newUserId === 'INVALID') {
+      const errorRes = await falcorModel.getValue('register.error');
+      this.setState({ error: errorRes });
+      return;
+    }
+    this.props.history.push('/login');
+
+    store.dispatch(push('/login'));
   }
 
   render() {
@@ -33,7 +45,7 @@ class RegistrationView extends React.Component {
       <div>
         <h1>Registration View</h1>
         <div>
-          <RegistrationForm />
+          <RegistrationForm onSubmit={this.register} />
         </div>
         <Snackbar
           autoHideDuration={4000}

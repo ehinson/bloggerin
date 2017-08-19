@@ -1,4 +1,4 @@
-import http from 'http';
+import http, { createServer } from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -7,14 +7,28 @@ import falcorExpress from 'falcor-express';
 import falcorRouter from 'falcor-router';
 import routes from './routes.js';
 import path from 'path';
+import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import ReactDOMServer, { renderToStaticMarkup } from 'react-dom/server';
+import ReactRouter, { StaticRouter } from 'react-router';
+import { match } from 'react-router-dom';
+import * as hist from 'history';
+import rootReducer from '../src/reducers';
+import reactRoutes from '../src/routes';
+import fetchServerSide from './fetchServerSide';
+import Root from '../src/containers/Root';
+import AppTest from '../src/AppTest';
+import devToolsEnhancer from 'remote-redux-devtools';
 
 const app = express();
-app.server = http.createServer(app);
+// app.server = createServer(app);
 
 app.use(cors());
 app.use(bodyParser.json({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/static', express.static(path.join(__dirname, 'dist')));
 let cache = {
   articles: [
     {
@@ -40,26 +54,79 @@ app.use(
     return new falcorRouter(routes);
   })
 );
+app.use((req, res, next) => {
+  try {
+    const context = {};
+    const memoryHistory = hist.createMemoryHistory();
+    let initMOCKstore = fetchServerSide();
+    const store = createStore(rootReducer, initMOCKstore, devToolsEnhancer());
+    const initialState = store.getState();
 
-app.use(express.static('dist'));
+    const html = ReactDOMServer.renderToString(
+      <Provider store={store}>
+        <StaticRouter
+          location={req.url}
+          context={context}
+          history={memoryHistory}
+        >
+          <Root />
+        </StaticRouter>
+      </Provider>
+    );
 
-app.get('/', (req, res) => {
-  Article.find((err, docs) => {
-    const myArticles = docs
-      .map(item => {
-        return `<h2>${item.articleTitle}</h2>
-      ${item.articleContent}`;
-      })
-      .join('<br/>');
-    res.send(`<h1>Publishing App Initial Application!</h1>
-      ${myArticles}`);
-  });
+    if (context.url) {
+      res.writeHead(301, {
+        Location: context.url
+      });
+      res.end();
+    } else {
+      res.write(renderFullPage(html, initialState));
+      res.end();
+    }
+  } catch (err) {
+    next(err);
+  }
 });
+
+function renderFullPage(html, initialState) {
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Bloggerin ServerRendering</title>
+      </head>
+      <body>
+        <div id="root">${html}</div>
+        <script>
+          // WARNING: See the following for security issues around embedding JSON in HTML:
+          // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
+          window.__PRELOADED_STATE__ = ${JSON.stringify(initialState).replace(
+            /</g,
+            '\\u003c'
+          )}
+        </script>
+        <script src="static/app.js"></script>
+      </body>
+    </html>
+    `;
+}
+
+// app.get('/', (req, res) => {
+//   Article.find((err, docs) => {
+//     const myArticles = docs
+//       .map(item => {
+//         return `<h2>${item.articleTitle}</h2>
+//       ${item.articleContent}`;
+//       })
+//       .join('<br/>');
+//     res.send(`<h1>Publishing App Initial Application!</h1>
+//       ${myArticles}`);
+//   });
+// });
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'index.html'));
 // });
 
-app.server.listen(process.env.PORT || 3001);
-
-console.log(`Started on port ${app.server.address().port}`);
+app.listen(process.env.PORT || 3003);
+// console.log(`Started on port ${app.server.address().port}`);
 export default app;
