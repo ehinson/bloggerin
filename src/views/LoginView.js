@@ -26,6 +26,7 @@ class LoginView extends React.Component {
   }
 
   async login(credentials) {
+    console.info('credentials', credentials);
     await falcorModel.call(['login'], [credentials]).then(result => {
       console.log(result);
       return result;

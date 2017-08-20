@@ -1,13 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import createHistory from 'history/createBrowserHistory';
+import { BrowserRouter } from 'react-router-dom';
+import AppTest from './AppTest';
 import Root from './containers/Root';
+import createHistory from 'history/createBrowserHistory';
 import configureStore from './store/configureStore';
+import { ConnectedRouter } from 'react-router-redux';
+import { Provider } from 'react-redux';
 
-export const history = createHistory();
-const target = document.getElementById('root');
+if (typeof window !== 'undefined') {
+  const history = createHistory();
 
-export const store = configureStore(window.__INITIAL_STATE__);
-const node = <Root history={history} store={store} />;
+  const store = configureStore(window.__PRELOADED_STATE__);
+  delete window.__PRELOADED_STATE__;
 
-ReactDOM.render(node, target);
+  ReactDOM.render(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Root />
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById('root')
+  );
+}
