@@ -54,40 +54,37 @@ app.use(
     return new falcorRouter(routes);
   })
 );
-app.use((req, res, next) => {
-  try {
-    const context = {};
-    const memoryHistory = hist.createMemoryHistory();
-    let initMOCKstore = fetchServerSide();
-    const store = createStore(rootReducer, initMOCKstore, devToolsEnhancer());
-    const initialState = store.getState();
+app.use(handleServerRender);
 
-    const html = ReactDOMServer.renderToString(
-      <Provider store={store}>
-        <StaticRouter
-          location={req.url}
-          context={context}
-          history={memoryHistory}
-        >
-          <Root />
-        </StaticRouter>
-      </Provider>
-    );
+function handleServerRender(req, res) {
+  const context = {};
+  const memoryHistory = hist.createMemoryHistory();
+  let initMOCKstore = fetchServerSide();
+  const store = createStore(rootReducer, initMOCKstore, devToolsEnhancer());
+  const initialState = store.getState();
 
-    if (context.url) {
-      res.writeHead(301, {
-        Location: context.url
-      });
-      res.end();
-    } else {
-      res.write(renderFullPage(html, initialState));
-      res.end();
-    }
-  } catch (err) {
-    next(err);
+  const html = ReactDOMServer.renderToString(
+    <Provider store={store}>
+      <StaticRouter
+        location={req.url}
+        context={context}
+        history={memoryHistory}
+      >
+        <Root />
+      </StaticRouter>
+    </Provider>
+  );
+
+  if (context.url) {
+    res.writeHead(301, {
+      Location: context.url
+    });
+    res.end();
+  } else {
+    res.write(renderFullPage(html, initialState));
+    res.end();
   }
-});
-
+}
 function renderFullPage(html, initialState) {
   return `
     <!DOCTYPE html>
@@ -105,24 +102,24 @@ function renderFullPage(html, initialState) {
             '\\u003c'
           )}
         </script>
-        <script src="static/app.js"></script>
+        <script src="app.js"></script>
       </body>
     </html>
     `;
 }
 
-// app.get('/', (req, res) => {
-//   Article.find((err, docs) => {
-//     const myArticles = docs
-//       .map(item => {
-//         return `<h2>${item.articleTitle}</h2>
-//       ${item.articleContent}`;
-//       })
-//       .join('<br/>');
-//     res.send(`<h1>Publishing App Initial Application!</h1>
-//       ${myArticles}`);
-//   });
-// });
+app.get('/', (req, res) => {
+  Article.find((err, docs) => {
+    const myArticles = docs
+      .map(item => {
+        return `<h2>${item.articleTitle}</h2>
+      ${item.articleContent}`;
+      })
+      .join('<br/>');
+    res.send(`<h1>Publishing App Initial Application!</h1>
+      ${myArticles}`);
+  });
+});
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'index.html'));
 // });
