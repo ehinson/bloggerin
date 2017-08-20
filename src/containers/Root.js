@@ -8,7 +8,6 @@ import DashboardView from '../views/DashboardView';
 import RegistrationView from '../views/RegistrationView';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { injectGlobal } from 'styled-components';
-import { Provider } from 'react-redux';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 

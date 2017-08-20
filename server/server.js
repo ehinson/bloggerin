@@ -28,7 +28,7 @@ app.use(cors());
 app.use(bodyParser.json({ extended: false }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/static', express.static(path.join(__dirname, 'dist')));
+// app.use('/static', express.static(path.join(__dirname, 'dist')));
 let cache = {
   articles: [
     {
@@ -54,16 +54,15 @@ app.use(
     return new falcorRouter(routes);
   })
 );
-app.use(handleServerRender);
+app.use(express.static('dist'));
 
 function handleServerRender(req, res) {
   const context = {};
   const memoryHistory = hist.createMemoryHistory();
   let initMOCKstore = fetchServerSide();
   const store = createStore(rootReducer, initMOCKstore, devToolsEnhancer());
-  const initialState = store.getState();
 
-  const html = ReactDOMServer.renderToString(
+  const html = ReactDOMServer.renderToStaticMarkup(
     <Provider store={store}>
       <StaticRouter
         location={req.url}
@@ -74,6 +73,7 @@ function handleServerRender(req, res) {
       </StaticRouter>
     </Provider>
   );
+  const initialState = store.getState();
 
   if (context.url) {
     res.writeHead(301, {
@@ -91,6 +91,9 @@ function renderFullPage(html, initialState) {
     <html>
       <head>
         <title>Bloggerin ServerRendering</title>
+        <link href="https://fonts.googleapis.com/css?family=Zilla+Slab:300,400" rel="stylesheet">
+        <link href="https://cdn.quilljs.com/1.3.0/quill.snow.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       </head>
       <body>
         <div id="root">${html}</div>
@@ -108,21 +111,22 @@ function renderFullPage(html, initialState) {
     `;
 }
 
-app.get('/', (req, res) => {
-  Article.find((err, docs) => {
-    const myArticles = docs
-      .map(item => {
-        return `<h2>${item.articleTitle}</h2>
-      ${item.articleContent}`;
-      })
-      .join('<br/>');
-    res.send(`<h1>Publishing App Initial Application!</h1>
-      ${myArticles}`);
-  });
-});
+// app.get('/', (req, res) => {
+//   Article.find((err, docs) => {
+//     const myArticles = docs
+//       .map(item => {
+//         return `<h2>${item.articleTitle}</h2>
+//       ${item.articleContent}`;
+//       })
+//       .join('<br/>');
+//     res.send(`<h1>Publishing App Initial Application!</h1>
+//       ${myArticles}`);
+//   });
+// });
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'index.html'));
 // });
+app.use(handleServerRender);
 
 app.listen(process.env.PORT || 3003);
 // console.log(`Started on port ${app.server.address().port}`);

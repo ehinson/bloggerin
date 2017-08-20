@@ -25,7 +25,7 @@ const muiTheme = getMuiTheme(
 
 class CoreLayout extends Component {
   static propTypes = {
-    children: React.PropTypes.element
+    children: PropTypes.element
   };
 
   constructor(props) {

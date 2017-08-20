@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --open",
-    "start": "npm run webpack; node server",
+    "start": "npm run webpack; nodemon server",
     "webpack": "webpack --config ./webpack.config.js"
   },
   "keywords": [],
@@ -50,6 +50,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
+    "nodemon": "^1.11.0",
     "remote-redux-devtools": "^0.5.12",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.6.1"

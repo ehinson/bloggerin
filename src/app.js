@@ -6,6 +6,7 @@ import Root from './containers/Root';
 import createHistory from 'history/createBrowserHistory';
 import configureStore from './store/configureStore';
 import { ConnectedRouter } from 'react-router-redux';
+import { Provider } from 'react-redux';
 
 if (typeof window !== 'undefined') {
   const history = createHistory();
