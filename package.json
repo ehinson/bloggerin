@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --open",
-    "start": "npm run webpack; node server",
+    "start": "npm run webpack; nodemon server",
     "webpack": "webpack --config ./webpack.config.js"
   },
   "keywords": [],
@@ -36,6 +36,7 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
     "redux-simple-router": "^2.0.4",
     "redux-thunk": "^2.2.0",
     "styled-components": "^2.1.2"
@@ -49,6 +50,8 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
+    "nodemon": "^1.11.0",
+    "remote-redux-devtools": "^0.5.12",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.6.1"
   }
